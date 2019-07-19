@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Form, Divider } from 'antd';
+import { Table, Form, Divider, message } from 'antd';
 import http from '../../util/api.js';
 import Button from 'antd/es/button';
 import Modal from 'antd/es/modal';
@@ -48,8 +48,9 @@ class MainPage extends Component {
       articelNatureVisible: true,
       recordSet,
     });
-  
   };
+
+  // 关闭modal
   closeModal = () => {
     this.setState({ articelNatureVisible: false })
   }
@@ -149,6 +150,28 @@ class MainPage extends Component {
     // this.natureModal.showModal();
   }
 
+  // 点击发布
+  publishClick = (recordSet) =>{
+    console.log('recordSet', recordSet);
+    Modal.confirm({
+      title: '提示',
+      content: '您确定要发布这篇文章吗？',
+      onOk: async () => {
+        try {
+          let res =  await http().modifyRecords({
+            resid: '616607832207',
+            data:[{...recordSet, C3_616258130674: 'Y'}]
+          })
+          message.success(res.message);
+          this.onSearch();
+        } catch (error ) {
+          message.error(error.message)
+        }
+      }
+    });
+    this.setState( () => {this.onSearch()} )
+  }
+
   render() {
     const { size } = this.state;
     let { recordSet } = this.state;
@@ -181,6 +204,11 @@ class MainPage extends Component {
             >
               编辑文章属性
             </Button>
+            <Divider type="vertical" />
+            <Button size={size} 
+            onClick={() => this.publishClick(record)}
+            // onClick={this.publishClick} 
+            >发布</Button>
           </div>
         ),
       },
@@ -194,7 +222,6 @@ class MainPage extends Component {
           fontWeight: '650',
           fontStyle: 'normal',
           textAlign: 'center',
-          // borderLeft: '14px solid #949494',
           paddingLeft: '8px',
           color: 'grey',
           fontSize: '30px',
