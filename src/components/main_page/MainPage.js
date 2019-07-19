@@ -19,8 +19,8 @@ class MainPage extends Component {
       content: null,
       uContent: {},
       visible: false,
-      size:'small',
-      action:''
+      size: 'small',
+      action: ''
     }
   }
   // state = { visible: false };
@@ -29,28 +29,30 @@ class MainPage extends Component {
     this.onSearch()
   }
 
-  // 修改弹出框
+  // 修改的弹出框
   showModal = (recordSet) => {
-    console.log('recordSet',recordSet)
+    console.log('recordSet', recordSet)
     this.setState({
       visible: true,
       recordSet,
       content: BraftEditor.createEditorState(this.unescapeHTML(recordSet.articl_content)),
       uContent: recordSet.articl_content,
-      action:'nature'
+      action: 'nature'
     });
   };
 
+  // 编辑文章属性
   showModalTwo = (recordSet) => {
-    console.log('recordSet',recordSet)
+    console.log('recordSet', recordSet)
     this.setState({
-      visible: true,
+      articelNatureVisible: true,
       recordSet,
-      content: BraftEditor.createEditorState(this.unescapeHTML(recordSet.articl_content)),
-      uContent: recordSet.articl_content,
-      action:'nature'
     });
+  
   };
+  closeModal = () => {
+    this.setState({ articelNatureVisible: false })
+  }
 
   //html字符串转义
   unescapeHTML = (a) => {
@@ -74,15 +76,14 @@ class MainPage extends Component {
     // eslint-disable-next-line no-unreachable
     let res;
     const resid = 616607832207;
-    const data = [{REC_ID: this.state.recordSet.REC_ID , articl_content: content,}]
+    const data = [{ REC_ID: this.state.recordSet.REC_ID, articl_content: content, }]
     try {
       res = await http().modifyRecords({
         resid,
         data,
       });
       console.log("res", res)
-    
-      this.setState({ visible: false, },() => {
+      this.setState({ visible: false, }, () => {
         this.onSearch()
       })
     } catch (error) {
@@ -138,12 +139,13 @@ class MainPage extends Component {
   }
 
   // 编辑文章属性组件向父组件传递它本身
-  onRefNature = (data) =>{
-    this.natureModal = data;
+  onRefNature = (data) => {
+    this.onSearch()
+    this.setState({articelNatureVisible:false});
   }
 
   // 点击编辑属性显示信息
-  clickNature = () =>{
+  clickNature = () => {
     // this.natureModal.showModal();
   }
 
@@ -155,7 +157,7 @@ class MainPage extends Component {
         title: '标题',
         dataIndex: 'article_title',
         key: 'article_title',
-      },{
+      }, {
         title: '作者',
         dataIndex: 'author_name',
         key: 'author_name',
@@ -174,8 +176,8 @@ class MainPage extends Component {
             <Button size={size} onClick={() => this.showModal(record)} >编辑文章内容</Button>
             <Divider type="vertical" />
             <Button size={size}
-              onClick={this.clickNature}
-              // onClick={() => this.showModalTwo(record)}
+              // onClick={this.clickNature}
+              onClick={() => this.showModalTwo(record)}
             >
               编辑文章属性
             </Button>
@@ -184,26 +186,28 @@ class MainPage extends Component {
       },
     ];
     return (
-      <div style={{ margin: '0 auto',marginBottom:'40px',lineHeight: '50px',
-      marginTop:'40px' }}>
-        <span  style={{
+      <div style={{
+        margin: '0 auto', marginBottom: '40px', lineHeight: '50px',
+        marginTop: '40px'
+      }}>
+        <span style={{
           fontWeight: '650',
           fontStyle: 'normal',
-          textAlign:'center',
+          textAlign: 'center',
           // borderLeft: '14px solid #949494',
           paddingLeft: '8px',
           color: 'grey',
           fontSize: '30px',
-          marginBottom:'40px',
-          marginTop:'40px',
-          marginLeft:'575px'
+          marginBottom: '40px',
+          marginTop: '40px',
+          marginLeft: '575px'
         }}
-          >待发布文章</span>
-        <span style={{float: 'right', marginRight: '60px'}}>
-              <Button onClick={this.handBack}>退出</Button>
+        >待发布文章</span>
+        <span style={{ float: 'right', marginRight: '60px' }}>
+          <Button onClick={this.handBack}>退出</Button>
         </span>
-        <span style={{clear: 'both'}}></span>
-        <Table  columns={columns} dataSource={this.state.data} size="middle" />
+        <span style={{ clear: 'both' }}></span>
+        <Table columns={columns} dataSource={this.state.data} size="middle" />
         <Modal
           title="修改信息"
           visible={this.state.visible}
@@ -217,7 +221,7 @@ class MainPage extends Component {
             onChange={this.onChange}
           />
         </Modal>
-        <ArticleNature data={this.state.recordSet} onRef={this.onRefNature}/>
+        <ArticleNature onSearch={this.onSearch} onCloseModal={this.closeModal} data={this.state.recordSet} visible={this.state.articelNatureVisible} onRef={this.onRefNature} />
       </div>
     );
   }
