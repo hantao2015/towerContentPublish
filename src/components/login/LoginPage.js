@@ -3,11 +3,12 @@ import Button from 'antd/es/button';
 import Input from 'antd/es/input';
 import Icon from 'antd/es/icon';
 import './LoginPage.css';
-import {Form} from 'antd';
+import {Form,message} from 'antd';
 // import Form from 'antd/es/form';
 // import http from '../../util/api';
 import http from '../../util/api.js'
 import {removeItem, setItem, getItem} from '../../util/util';
+import MainPage from '../main_page/MainPage';
 
 class LoginPage extends Component {
     constructor(props) {
@@ -16,9 +17,22 @@ class LoginPage extends Component {
             recordSet:{
                 code: "",
                 password: "",
-            }
+            },
+            action:''
         }
     }
+
+    // 返回login页面
+    handBack = () => {
+        this.setState({
+            action:''
+        })
+    }
+
+    // 返回main页面
+    onGoBack = () => {
+        this.setState({action: 'mainPage'});
+      }
 
     onSubmit = async () => {
 
@@ -39,7 +53,6 @@ class LoginPage extends Component {
             //         data: [], // 要添加的记录；如 [{ name: '1', age: 18 }, { name: '2', age: 19 }]
             //         isEditoRAdd: false // 添加记录的状态是否为 'editoradd'；默认为 false，即状态为 'added'
             //     })
-
             let res = await http().login({
                 code: recordSet.code, // 用户名
                 password: recordSet.password, // 密码
@@ -56,12 +69,12 @@ class LoginPage extends Component {
                     }
                 })
             }
-
         } catch (error) {
-            console.log(error)
+            message.error(error.message);
         }
+    };
 
-    }
+    
     render() {
         let {recordSet} = this.state;
         const { getFieldDecorator } = this.props.form;
@@ -76,43 +89,8 @@ class LoginPage extends Component {
                         top: '0', bottom: '0', marginTop: 'auto', marginBottom: 'auto',
                         left: '0', right: '0', marginLeft: 'auto', marginRight: 'auto'
                     }}>
-                        <p style={{
-                            marginTop: '15%',
-                            marginLeft: '23%',
-                            color: 'rgb(27, 91, 212)',
-                            fontSize: '45pt',
-                            fontWeight: 'bold'
-                        }}>
-                            FINISAR
+                        <p style={{marginTop: '23%',marginLeft: '23%',color: 'rgb(27, 91, 212)',fontSize: '30pt',fontWeight: 'bold'}}>文章发布系统
                         </p>
-                        {/* <img
-                        style={{
-                            marginTop: '-34%',
-                            marginLeft: '23%',
-                            position:'absolute',
-                            width:'68%',
-                            height:'15%'
-                            }}
-                        src={[require("../img/2.png")]}/> */}
-                        <p style={{
-                            marginTop: '-13%',
-                            marginLeft: '46%',
-                            // background:'pink',
-                            color: 'black',
-                            fontSize: '15pt',
-                        }}>
-                            <b>菲尼萨</b>
-                        </p>
-                        <p style={{
-                            marginTop: '-3%',
-                            marginLeft: '31%',
-                            // background:'pink',
-                            color: 'black',
-                            fontSize: '15pt',
-                        }}>
-                            Finisar Corporation
-                        </p>
-
                         <Form>
                             <Form.Item>
                                 {getFieldDecorator('code', {
@@ -121,12 +99,10 @@ class LoginPage extends Component {
                                 })(
                                     <Input style={{ marginLeft: '27%', width: '54%' }}
                                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            
                                         placeholder='请输入你的用户名'
                                     />,
                                 )}
                             </Form.Item>
-                            
                             <Form.Item>
                                 {getFieldDecorator('password', {
                                     recordSet: recordSet.password,
@@ -139,13 +115,12 @@ class LoginPage extends Component {
                                     />,
                                 )}
                             </Form.Item>
-                            
                             <Button
                                 type="primary"
                                 style={{ marginLeft: '27%', width: '54%', marginTop: '5%' }}
                                 onClick={this.onSubmit}
                             >
-                                提交
+                                登录
                             </Button>
                         </Form>
                     </div>
@@ -158,8 +133,7 @@ class LoginPage extends Component {
                     // overflowY:'hidden'
                 }}>
                     <img style={{height:'175px', width: '100%', margin: '0 auto', position: 'absolute',marginTop:'450px' }} src={[require("../img/1.png")]} />
-
-                </div>
+                 </div>
             </div>
         );
     }
