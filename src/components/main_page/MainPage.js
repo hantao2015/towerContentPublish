@@ -128,6 +128,7 @@ class MainPage extends Component {
     }
   }
 
+  // 点击退出
   handBack = () => {
     Modal.confirm({
       title: '提示',
@@ -164,7 +165,7 @@ class MainPage extends Component {
           })
           message.success(res.message);
           this.onSearch();
-        } catch (error ) {
+        } catch (error) {
           message.error(error.message)
         }
       }
@@ -198,17 +199,9 @@ class MainPage extends Component {
           <div>
             <Button size={size} onClick={() => this.showModal(record)} >编辑文章内容</Button>
             <Divider type="vertical" />
-            <Button size={size}
-              // onClick={this.clickNature}
-              onClick={() => this.showModalTwo(record)}
-            >
-              编辑文章属性
-            </Button>
+            <Button size={size} onClick={() => this.showModalTwo(record)}>编辑文章属性</Button>
             <Divider type="vertical" />
-            <Button size={size} 
-            onClick={() => this.publishClick(record)}
-            // onClick={this.publishClick} 
-            >发布</Button>
+            <Button size={size} onClick={() => this.publishClick(record)}>发布</Button>
           </div>
         ),
       },
