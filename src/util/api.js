@@ -3,7 +3,10 @@ import {getItem} from './util';
 // http.setDefaultBaseURL('http://kingofdinner.realsun.me:9010/');
 http.setDefaultBaseURL('https://tower.realsun.me/');
 
-
+// 默认 options
+http.setDefaultOptions({
+  withCredentials: true
+});
 // 请求拦截
 http.setRequestInterceptors(
   function(config) {
