@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import LoginPage from './login/LoginPage'
 
 import MainPage from './main_page/MainPage'
+import PrintList from './PrintList/PrintList'
+import Home from './Home'
 
 //路由跳转和传值方法
 // this.props.history.push({
@@ -22,7 +24,9 @@ export default class MyRoute extends React.Component{
             <Router>
                 <div>
                     <Route exact path="/" component={LoginPage}/>
+                    <Route path="/home" component={Home}/>
                     <Route path="/mainPage" component={MainPage}/>
+                    <Route path="/printList" component={PrintList}/>
                 </div>
             </Router>
         )
